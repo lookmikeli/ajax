@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+              1.async异步函数语法：promise更加高级的写法
+                 async function 函数名(){
+                     const res = await promise实例
+                 }
+                 箭头函数写法：const fn = async()=>{}
+              2.async关键字：修饰函数，让函数内部可以使用await关键字
+              3.await关键字：取代then方法，并且得到 then的结果res
+              注意：await只能用在被async修饰的函数里面，否则会标错
+               */
+      const p = new Promise((resolve, reject) => {
+        // 异步操作
+        setTimeout(() => {
+          resolve(1);
+        }, 1000);
+      });
+      const p1 = new Promise((resolve, reject) => {
+        // 异步操作
+        setTimeout(() => {
+          resolve(2);
+        }, 100);
+      });
+      //   async异步函数：promise更加高级的写法
+      async function fn() {
+        // await promise实例
+        const res = await p; // await 等同于then promise写法 p.then(res=>{})
+        console.log(res); // 1
+        const res1 = await p1;
+        console.log(res1); // 2
+      }
+      fn();
+      // 还原promise then 方法
+      async function fn1() {
+        p.then((res) => {
+          console.log(res); // 1
+          p1.then((res1) => {
+            console.log(res1); // 2
+          });
+        });
+      }
+      fn1();
+    </script>
+  </body>
+</html>

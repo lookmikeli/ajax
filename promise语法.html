@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // (1)创建Promises实例
+      const p = new Promise((resolve, reject) => {
+        // 异步代码
+        let xhr = new XMLHttpRequest();
+        xhr.open("get", "https://autumnfish.cn/api/cq?query=1");
+        xhr.send();
+        xhr.onload = function () {
+          const res = JSON.parse(xhr.responseText);
+          if (res.code === 200) {
+            // 成功执行 then 方法
+            resolve(res);
+          } else {
+            // 失败执行 catch 方法
+            reject("失败");
+          }
+        };
+      });
+      // (2)调用promise 实例的then
+      p.then((res) => {
+        console.log(res);
+      }).catch((res) => {
+        console.log(err);
+      });
+
+      // promise面试
+      /*  1.promise是es6新增的一个对象，主要解决异步回调地狱的问题，promise有三种状态分别是进行中、已成功、已失败，当我们一旦创建promise的时候，他就是进行中的状态，此时promise里面的代码就会立即执行，当我们分别调用resolve和reject,其实就是改变他的状态，promise的状态的改变只有两种，从进行中到已完成和进行中到已失败，当我们二选一调用reslove和reject 的时候，此时promise的实例会分别对应执行它的then和catch方法，两种方法只能是执行其中的一个； */
+    </script>
+  </body>
+</html>

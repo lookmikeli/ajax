@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="axios.js"></script>
+  </head>
+  <body>
+    <script>
+      // 第一种原生xhr
+      function fnxhr() {
+        // 一级分类
+        const xhr1 = new XMLHttpRequest();
+        xhr1.open(
+          "get",
+          "http://ajax-api.itheima.net/api/area?pname=湖北省&cname=武汉市"
+        );
+        xhr1.send();
+        xhr1.onload = function () {
+          console.log(JSON.parse(xhr1.responseText));
+          console.log("一级分类");
+          // 二级分类
+          const xhr2 = new XMLHttpRequest();
+          xhr2.open(
+            "get",
+            "http://ajax-api.itheima.net/api/area?pname=湖北省&cname=武汉市"
+          );
+          xhr2.send();
+          xhr2.onload = function () {
+            console.log(JSON.parse(xhr2.responseText));
+            console.log("二级分类");
+            // 三级分类
+            const xhr3 = new XMLHttpRequest();
+            xhr3.open(
+              "get",
+              "http://ajax-api.itheima.net/api/area?pname=湖北省&cname=武汉市"
+            );
+            xhr3.send();
+            xhr3.onload = function () {
+              console.log(JSON.parse(xhr3.responseText));
+              console.log("三级分类");
+            };
+          };
+        };
+      }
+      fnxhr();
+      // 第二种 axios 方法(1)
+      axios({
+        url: "http://ajax-api.itheima.net/api/area",
+        method: "get",
+        params: { pname: "湖北省", cname: "武汉市" },
+        // post 参数 data:{pname: "湖北省", cname: "武汉市"}
+      }).then((res) => {
+        console.log(res.data);
+      });
+
+      // 第二种 axios 方法(2)
+      axios
+        .get("http://ajax-api.itheima.net/api/area", {
+          params: { pname: "湖北省", cname: "武汉市" },
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
+
+      // 第三种 promise 解决回调地狱
+      axios
+        .get("http://ajax-api.itheima.net/api/area?pname=湖北省&cname=武汉市")
+        .then((res1) => {
+          console.log("一级分类");
+          console.log(res1.data);
+          return axios.get(
+            "http://ajax-api.itheima.net/api/area?pname=湖北省&cname=武汉市"
+          );
+        })
+        .then((res2) => {
+          console.log("二级分类");
+          console.log(res2.data);
+          return axios.get(
+            "http://ajax-api.itheima.net/api/area?pname=湖北省&cname=武汉市"
+          );
+        })
+        .then((res3) => {
+          console.log("三级分类");
+          console.log(res3.data);
+        });
+      // 第四种 异步函数 async await
+      async function fn() {
+        const res1 = await axios.get(
+          "http://ajax-api.itheima.net/api/area?pname=湖北省&cname=武汉市"
+        );
+        console.log("第一级");
+        console.log(res1.data);
+        const res2 = await axios.get(
+          "http://ajax-api.itheima.net/api/area?pname=湖北省&cname=武汉市"
+        );
+        console.log("第二级");
+        console.log(res2.data);
+
+        const res3 = await axios.get(
+          "http://ajax-api.itheima.net/api/area?pname=湖北省&cname=武汉市"
+        );
+        console.log("第三级");
+        console.log(res3.data);
+      }
+      fn();
+    </script>
+  </body>
+</html>
